@@ -446,7 +446,7 @@ div.forms-containers{
 }
 .form_btn.show{
     display: block;
-    position: absolute;
+    position: fixed;
     z-index: 25;
 }
 .table_form .container-title{
@@ -645,6 +645,10 @@ footer ul{
         top:22%;
         left: 85%;
         width: 4%;
+    }
+
+    .email-contact-container{
+        width: 40%;
     }
     /*menu*/
     #btn{

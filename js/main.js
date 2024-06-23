@@ -136,7 +136,7 @@ async function table(){
                 <td>${elem.year}</td>
                 <td class="hidden_category">${elem.doors}</td>
                 <td>${elem.power}</td>
-                <td>${elem.price}</td>
+                <td>$${elem.price}</td>
                 <td id="${elem.id}"><input type="radio" name="car" class="radio"></td>
             </tr>`;
         }
