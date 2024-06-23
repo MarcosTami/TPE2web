@@ -1,0 +1,118 @@
+
+        <div class="title-text">
+            <h4>Encontrá tu mejor opción</h4>
+        </div>
+        <div class="overlay"></div>
+        <div class="forms-containers">
+            <button type="button" id="close_forms" class="form_btn">✘</button>
+            <div class="table_form container-car-add-form">
+                <div class="container-title">
+                    <h2>Agrega un vehiculo</h2>
+                </div>
+                <div class="form-area add-car">
+                    <form class="form" id="car-form"> 
+                        <div class="container-input">
+                            <label for="brand"> <b>Marca</b> </label><input type="text" name="brand" id="name" class="inputs" placeholder="Nombre" required>
+                        </div>
+    
+                        <div class="container-input">
+                            <label for="model"> <b>Modelo</b> </label><input type="text" name="model" id="model" class="inputs" placeholder="Modelo" required>
+                        </div>
+                        
+                        <div class="container-input">
+                            <label for="year"> <b>Año</b> </label><input type="number" name="year" id="year" class="inputs" placeholder="Año de fabricacion" required>
+                        </div>
+    
+                        <div class="container-input">
+                            <label for="doors"> <b>Puertas</b> </label><input type="number" name="doors" id="doors" class="inputs" placeholder="3" required max="5">
+                        </div>
+    
+                        <div class="container-input">
+                            <label for="power"> <b>HP</b> </label><input type="number" name="power" id="power" class="inputs" placeholder="750" required>
+                        </div>
+    
+                        <div class="container-input">
+                            <label for="price"> <b>Precio</b> </label><input type="number" name="price" id="price" class="inputs" placeholder="Expresado en usd" required>
+                        </div>
+    
+                        <div class="container-input">
+                        <input data-creature="prices" type="submit" value="enviar" id="submit" class="inputs"> 
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="table_form container-car-edit-form">
+                <div class="container-title">
+                    <h2>Edita el vehiculo</h2>
+                </div>
+                <div class="form-area edit-car">
+                    <form class="form" id="edit-car-form"> 
+                        <div class="container-input">
+                            <label for="brand"> <b>Marca</b> </label><input type="text" name="brand" id="name" class="inputs" placeholder="Nombre" required>
+                        </div>
+        
+                        <div class="container-input">
+                            <label for="model"> <b>Modelo</b> </label><input type="text" name="model" id="model" class="inputs" placeholder="Modelo" required>
+                        </div>
+                        
+                        <div class="container-input">
+                            <label for="year"> <b>Año</b> </label><input type="number" name="year" id="year" class="inputs" placeholder="Año de fabricacion" required>
+                        </div>
+        
+                        <div class="container-input">
+                            <label for="doors"> <b>Puertas</b> </label><input type="number" name="doors" id="doors" class="inputs" placeholder="3" required max="5">
+                        </div>
+        
+                        <div class="container-input">
+                            <label for="power"> <b>HP</b> </label><input type="number" name="power" id="power" class="inputs" placeholder="750" required>
+                        </div>
+        
+                        <div class="container-input">
+                            <label for="price"> <b>Precio</b> </label><input type="number" name="price" id="price" class="inputs" placeholder="Expresado en usd" required>
+                        </div>
+        
+                        <div class="container-input">
+                         <input type="submit" value="enviar" id="submit" class="inputs"> 
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <td>Marca</td>
+                        <td>Modelo</td>
+                        <td>Año</td>
+                        <td class="td_th_ocultar">Puertas</td>
+                        <td>HP</td>
+                        <td>Precio <span class="sub-text">(usd)</span></td>
+                        <td><span class="sub-text">opciones</span></td>
+                    </tr>
+                </thead>
+                <tbody id="cars-table">
+                    
+                </tbody>
+            </table>
+        </div>
+        <div class="table-options-container">
+            <div class="div">
+                <div class="options-container">
+                        <button type="button" id="add-car">Agregar</button>
+                        <button type="button" id="edit-car">Editar</button>
+                        <button type="button" id="delete-car">Eliminar</button>
+                </div>
+                <div class="option-msg-container">
+                    <p id="table-msg"></p>
+                </div>
+            </div>
+            
+        </div>
+        
+        
+        <div class="text">
+            <p>Explora los vehiculos haciendo <span class="text-anchor listen_button" data-creature="categories">click aqui</span></p>
+        </div>
