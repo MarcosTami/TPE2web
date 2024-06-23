@@ -3,7 +3,7 @@
 //Constantes direcciones 
 const API = 'https://666b32567013419182d29d94.mockapi.io';
 const HOME = './content/home.html';
-const cantProducs = 2;
+const cantProducs = 6;
 
 //controla el menu desplegable
 document.querySelector("#btn").addEventListener("click", toggle_menu);
@@ -30,6 +30,7 @@ document.addEventListener("DOMContentLoaded", async (e)=> {
             let text = await response.text();
             content.innerHTML = text;
             loadEventButtons();
+            reloaded();
         }
         else{
             content.innerHTML =`<h2>Error ${response.status}</h2>`;
@@ -40,12 +41,17 @@ document.addEventListener("DOMContentLoaded", async (e)=> {
 });
 
 //CARGA DINAMICA DE LA PAGINA 
-async function rooter(e) {
-    e.preventDefault();
+async function rooter(e, path, isButtonClick) {
     let content = document.querySelector(".main");
-    const creature = e.target.getAttribute("data-creature");
+    let creature = " ";
+    if(isButtonClick){
+        creature = e.target.getAttribute("data-creature");
+    }
+    else{
+        creature = path;
+    }
     
-    if(creature){
+
         content.innerHTML = '<h2>Cargando...</h2>';
     
         try{
@@ -76,30 +82,40 @@ async function rooter(e) {
 
                 loadEventButtons();
                 window.scrollTo(0,0);
+                if(isButtonClick && creature !== "product"){
+                    window.history.pushState(creature, "Titulo", creature);
+                }
 
-                }
-                else{
-                    content.innerHTML =`<h2>Error ${response.status}</h2>`;
-                }
+            }
+            else{
+                content.innerHTML =`<h2>Error ${response.status}</h2>`;
+            }
         }catch(error){
             content.innerHTML = '<h2>Error al cargar!</h2>' + error;
             console.error(error);
-        }
-    }
-
-   
-        
+        }    
 }
 
 //BOTONES PARA NAVEGAR ENTRE PAGINAS
 
+// Función que maneja el evento click en los botones .listen_button
+function buttonClickListener(event) {
+    let creature = event.target.getAttribute('data-creature');
+    rooter(event, creature, true); // Indica que es un clic de botón
+}
+
+// Función para cargar o recargar los event listeners de los botones
 function loadEventButtons() {
     let buttons = document.querySelectorAll(".listen_button");
-    for (const button of buttons) {
-        button.removeEventListener("click", rooter);
+
+    // Primero, eliminamos todos los event listeners existentes
+    for (let button of buttons) {
+        button.removeEventListener("click", buttonClickListener);
     }
-    for (const button of buttons) {
-        button.addEventListener("click", rooter);
+
+    // Luego, agregamos los event listeners actualizados
+    for (let button of buttons) {
+        button.addEventListener("click", buttonClickListener);
     }
 }
 
@@ -108,7 +124,7 @@ function loadEventButtons() {
 async function table(){
     try{
         
-        const cars = document.querySelector("#cars-table");
+        let cars = document.querySelector("#cars-table");
         cars.innerHTML=" ";
         let table = await fetch(`${API}/cars`);
         let content = await table.json();
@@ -118,7 +134,7 @@ async function table(){
                 <td>${elem.brand}</td>
                 <td>${elem.model}</td>
                 <td>${elem.year}</td>
-                <td class="td_th_ocultar">${elem.doors}</td>
+                <td class="hidden_category">${elem.doors}</td>
                 <td>${elem.power}</td>
                 <td>${elem.price}</td>
                 <td id="${elem.id}"><input type="radio" name="car" class="radio"></td>
@@ -132,7 +148,7 @@ async function table(){
 
 ////FUNCIONES AUXILIARES ////
 
-//Mensage para notificar que se vede selecionar un radioButton
+//Mensage para notificar que se debe selecionar un radioButton
 function error_msg(flag){
     let msg = document.querySelector("#table-msg");
     if(!flag){
@@ -192,7 +208,7 @@ function edit_btn(){
         let flag = false;
         for(let selected of radios){
             if(selected.checked){
-                toggle_forms(containerForm );
+                toggle_forms(containerForm);
 
                 let car_id = selected.parentElement.getAttribute("id");
                 containerForm .setAttribute("data-id", car_id);
@@ -277,7 +293,7 @@ async function add_car(e){
 
 ////ELIMINAR AUTITO////
 
-//Encuantra la id del auto a eliminar en la tabla 
+//Encuentra la id del auto a eliminar en la tabla 
 
 function delete_btn(){
     document.querySelector("#delete-car").addEventListener("click", async (e)=>{
@@ -309,6 +325,7 @@ async function delete_car(car_id){
 
 
 async function captcha(){
+    
     let form = document.querySelector("#FORM");
     // Escucha si se envia el formulario de contacto
     form.addEventListener("submit", (e)=>{
@@ -327,7 +344,6 @@ async function captcha(){
         }
     })
     //carga la imagen del captcha
-    document.querySelector("#FORM").addEventListener("onload", ()=>{
         let key = Math.floor(Math.random()*3);
         let captchaTXT = ["15fhw2g5", "be1t5an0", "e43cv1l8"];
         
@@ -346,18 +362,17 @@ async function captcha(){
                 input.classList.remove("correct");
             }
         });
-    })
+    
 }
 
 
 ////CATEGORIAS////
 
 //Obtione informacion de la DB (products)
-async function getProducts( id = -1 , page = 1) {
-    console.log(id)
+async function getProducts( id = -1, page = 1) {
     let cat;
     let content;
-    if (id ==-1) {
+    if (id==-1) {
 
         let url = new URL(`${API}/products`);
         url.searchParams.append('page', page);
@@ -375,15 +390,14 @@ async function getProducts( id = -1 , page = 1) {
     return await content
 }
 
-// Cambia la informacion de la pagina vehicles, por la informacion que el haya pepido el usuario 
+// Cambia la informacion de la pagina vehicles, por la informacion que el haya pedido el usuario 
 async function product(id) {
-
     let product = await getProducts(id);
-    console.log(product.img)
     document.querySelector("#car-img").src = `./images/vehicles/${await product.img}.jpg`;
     document.querySelector("#car-brand").innerHTML = await product.brand;
     document.querySelector("#car-model").innerHTML = await product.model;
     document.querySelector("#car-year").innerHTML = await product.year ; 
+    document.querySelector("#car-door").innerHTML = await product.doors ; 
 }
 
 // Toma la infomacion de la DB y la cambierte en html para la pagina de categorias 
@@ -402,13 +416,14 @@ async function CreateCardsCategory(products) {
     return fragment;
 }
 
-// Toma la informacion de la DB tranformada en html y la inserta en la pagina vehicles 
+// Toma la informacion de la Database tranformada en html y la inserta en la pagina vehicles 
 async function insertCarCards(cards){
     let div = document.querySelector("#vehicles-results");
+    div.innerHTML = '<h2>Cargando...</h2>';
     div.innerHTML = cards;
 }
 
-//Escucha los clicks en la pagina category y toma la id de la card que el usuario preciono 
+//Escucha los clicks en la pagina category y toma la id de la card que el usuario presiono 
 function eventProductCard() {
    let productButtons = document.querySelectorAll(".product_card")
    for (const button of productButtons) {
@@ -423,10 +438,10 @@ function eventProductCard() {
 function butonAfterBefore() {
     document.querySelector(".previous").addEventListener("click",()=>{
         let page_number = document.querySelector(".page_number").value
-        if (page_number>= 1 ) {
+        if (page_number> 1 ) {
             page_number--;
             loadCategoryContent(page_number);
-
+            window.scrollTo(0,0);
         }
     } )
 
@@ -436,6 +451,7 @@ function butonAfterBefore() {
         if (page_number < totalPages ) {
             page_number++;
             loadCategoryContent(page_number);
+            window.scrollTo(0,0);
         }
     } )
 
@@ -451,7 +467,8 @@ async function loadCategoryContent (page_number) {
     viewPage.value = page_number;
     viewPage.innerHTML = page_number;
     loadEventButtons();
-    eventProductCard()
+    eventProductCard();
+
 }
 
 
@@ -460,4 +477,17 @@ async function totalPages() {
     let content = await cat.json();
     let pages = Math.ceil((Object.keys(content).length)/cantProducs);
     document.querySelector(".next").id =`${pages}`;
+}
+
+//funciones para recargar contenido segun avance o retroceda el usuario
+window.addEventListener("popstate",handlePageLoad);
+    
+window.addEventListener("load", handlePageLoad);
+
+function handlePageLoad(e){
+    let path = location.pathname.substring(1);
+    if(path == '' || path == 'index.html'){
+        path = 'home';
+    }
+    rooter(e, path, false);
 }
